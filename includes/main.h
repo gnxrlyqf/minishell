@@ -5,24 +5,30 @@
 # include <stdlib.h>
 # include <readline/readline.h>	
 
-typedef enum lexicon
+typedef enum type
 {
+	none,
+	exp,
 	cmd,
-	var,
+	op_and,
+	op_or,
 	pipe,
-	overwr,
-	open,
-	append,
-	heredoc,
-	and,
-	or
-} t_lex;
+	redir_w,
+	redir_r,
+	redir_app,
+	redir_hd,
+	var
+} t_type;
 
-typedef struct s_list
+typedef struct s_member
 {
-	void *elem;
-	t_lex type;
-	struct s_list *next;
-} t_list;
+	char *str;
+	t_type type;
+	struct s_member *members;
+} t_member;
+
+char	*ft_strtok_r(char *str, char *delims, char **save);
+char	*ft_strdup(char *src);
+
 
 #endif
