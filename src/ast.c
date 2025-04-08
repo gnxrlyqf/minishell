@@ -1,18 +1,19 @@
 #include <main.h>
 
-void print_args(char **args, int indent)
+void print_args(char **args, int indent, int count)
 {
 	int i;
+	int j;
 
-	i = 0;
-	while (i++ < indent)
+	j = 0;
+	while (j++ < indent)
 		printf("    ");
 	printf("[");
-	while (*args)
+	i = -1;
+	while (++i < count)
 	{
-		printf("\"%s\"", *args);
-		args++;
-		if (*args != NULL)
+		printf("\"%s\"", args[i]);
+		if (i < count - 1)
 			printf(", ");
 	}
 	printf("]\n");
@@ -22,25 +23,21 @@ void print_ast(t_member *tree, int indent)
 {
 	char *strs[] = {"NONE", "OR", "AND", "WRITE", "APPEND", "READ", "HEREDOC", "PIPE", "CMD", "SUBSHELL"};
 	int i;
+	int j;
 
-	i = 0;
-	while (i++ < indent)
+	j = 0;
+	while (j++ < indent)
 		printf("    ");
-	if (tree->child1 && tree->child2)
+	i = 0;
+	printf("%s:\n", strs[tree->type]);
+	if (tree->type == CMD)
+		print_args((char **)tree->members, 0, tree->size);
+	else if (tree->type == SUBSHELL)
 	{
-		printf("%s:\n", strs[tree->type]);
-		print_ast(tree->child1, indent + 1);
-		print_ast(tree->child2, indent + 1);
+		puts("");
+		print_ast(tree->members[0], indent + 1);
 	}
-	else if (tree->child1 && !tree->child2)
-	{
-		printf("%s: ", strs[tree->type]);
-		if (tree->type == SUBSHELL)
-		{
-			puts("");
-			print_ast(tree->child1, indent + 1);
-		}
-		if (tree->type == CMD)
-			print_args((char **)tree->child1, 0);
-	}
+	else
+		while (i < tree->size)
+			print_ast(tree->members[i++], indent + 1);
 }

@@ -7,7 +7,7 @@ char	*ft_strtrim(char *s1, char *set)
 	char	*new;
 
 	len = ft_strlen(s1);
-	while (--len && ft_strchr(set, s1[len]));
+	while (--len && ft_strchr(set, s1[len]))
 		;
 	if (!len)
 		return (ft_strdup(""));

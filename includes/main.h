@@ -15,31 +15,38 @@ typedef enum type
 	APPEND,
 	READ,
 	HEREDOC,
-	PIPE,
+	PIPELINE,
 	CMD,
 	SUBSHELL
 } t_type;
 
 typedef struct	s_member
 {
-	t_type			type;
-	void			*child1;
-	void			*child2;
+	t_type	type;
+	int		size;
+	void	**members;
 }	t_member;
 
 char	*ft_strtok_r(char *str, char *delims, char **save);
 char	*ft_strdup(char *src);
 char	*ft_strchr(char *str, char c);
 char	*ft_strstr(char *big, char *little);
-char	*find_op(char *str, char *op);
+char	*strstr_skip(char *str, char *sub);
+char	*strrstr_skip(char *str, char *sub);
 int		ft_strlen(char *str);
 char	*ft_strtrim(char *s1, char *set);
 int		ft_strncmp(char *s1, char *s2, unsigned int n);
 char	*ft_strtok(char *str, char *delims);
+int		wc(char *str, char c);
+char	**tokenize(char *str);
 
-long	max(long a, long b);
 
-void	*deconstruct(char *str);
+char	*max_str(char *a, char *b);
+
+t_member *parse_pipeline(char *str);
+t_member *parse_subshell(char *str);
+t_member *parse_cmd(char *str);
+t_member *parse_logop(char *str);
 
 void print_ast(t_member *tree, int indent);
 
