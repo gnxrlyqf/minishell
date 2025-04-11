@@ -45,19 +45,20 @@ t_member *parse_pipeline(char *str)
 	count = wc(str, '|');
 	if (count <= 1)
 		return (parse_subshell(str));
-	i = 0;
-	skip = 0;
 	pipeline = malloc(sizeof(t_member));
 	pipeline->type = PIPELINE;
 	pipeline->size = count;
 	pipeline->members = malloc(count * sizeof(t_member *));
-	while (i < count)
+	i = 0;
+	skip = 0;
+	while (--count)
 	{
-		skip += ft_strlen(strstr_skip(str, "|"));
+		skip = ft_strlen(str) - ft_strlen(strstr_skip(str, "|"));
 		str[skip] = 0;
 		pipeline->members[i++] = parse_subshell(str);
 		str += skip + 1;
 	}
+	pipeline->members[i] = parse_subshell(str);
 	return (pipeline);
 }
 
@@ -73,7 +74,7 @@ t_member *parse_logop(char *str)
 	op->type = AND * (*split == '&') + OR * (*split == '|');
 	op->members = malloc(2 * sizeof(t_member *));
 	op->size = 2;
-	str[ft_strlen(split)] = 0;
+	str[ft_strlen(str) - ft_strlen(split)] = 0;
 	split += 2;
 	op->members[0] = parse_logop(str);
 	op->members[1] = parse_pipeline(split);

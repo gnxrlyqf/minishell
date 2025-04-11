@@ -1,53 +1,57 @@
 #include <main.h>
 
-char	*ft_strtrim(char *s1, char *set)
+char	*strrstr_skip(char *str, char *sub)
 {
-	int		i;
-	int		len;
-	char	*new;
+	int	i;
+	int skip;
+	int sublen;
 
-	len = ft_strlen(s1);
-	while (--len && ft_strchr(set, s1[len]))
-		;
-	if (!len)
-		return (ft_strdup(""));
-	i = -1;
-	while (s1[++i] && ft_strchr(set, s1[i]))
-		len--;
-	new = malloc(++len + 1);
-	if (!new)
-		return (NULL);
-	new += len + 1;
-	*new = 0;
-	while (len--)
-		*(--new) = s1[i + len];
-	return (new);
+	sublen = ft_strlen(sub);
+	skip = 0;
+	i = ft_strlen(str);
+	while (--i >= 0)
+	{
+		if (ft_strchr("\"')", str[i]))
+		{
+			skip++;
+			continue;
+		}
+		if (ft_strchr("\"'(", str[i]))
+		{
+			skip--;
+			continue;
+		}
+		if (!skip && !ft_strncmp(str + i, sub, sublen))
+			return (str + i);
+	}
+	return (NULL);
 }
 
-char	*ft_strstr(char *big, char *little)
+char	*strstr_skip(char *str, char *sub)
 {
-	int		i;
-	int		j;
-	char	*temp;
+	int	i;
+	int skip;
+	int sublen;
+	int strlen;
 
-	if (!big || !little || !*little)
-		return (big);
-	i = 0;
-	while (big[i])
+	sublen = ft_strlen(sub);
+	strlen = ft_strlen(str);
+	skip = 0;
+	i = -1;
+	while (++i < strlen)
 	{
-		if (big[i] == *little)
+		if (ft_strchr("\"'(", str[i]))
 		{
-			j = i;
-			temp = little;
-			while (*temp && *temp == big[j])
-			{
-				j++;
-				temp++;
-			}
-			if (!*temp)
-				return (big + i);
+			skip++;
+			continue;
 		}
-		i++;
+		if (ft_strchr("\"')", str[i]))
+		{
+			skip--;
+			continue;
+		}
+		if (!skip && !ft_strncmp(str + i, sub, sublen))
+			return (str + i);
 	}
 	return (NULL);
 }

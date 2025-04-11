@@ -39,6 +39,8 @@ int		ft_strncmp(char *s1, char *s2, unsigned int n);
 char	*ft_strtok(char *str, char *delims);
 int		wc(char *str, char c);
 char	**tokenize(char *str);
+int validate_input(char *str);
+
 
 
 char	*max_str(char *a, char *b);

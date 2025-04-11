@@ -8,7 +8,7 @@ void print_args(char **args, int indent, int count)
 	j = 0;
 	while (j++ < indent)
 		printf("    ");
-	printf("[");
+	printf(" [");
 	i = -1;
 	while (++i < count)
 	{
@@ -16,12 +16,12 @@ void print_args(char **args, int indent, int count)
 		if (i < count - 1)
 			printf(", ");
 	}
-	printf("]\n");
+	printf("]");
 }
 
 void print_ast(t_member *tree, int indent)
 {
-	char *strs[] = {"NONE", "OR", "AND", "WRITE", "APPEND", "READ", "HEREDOC", "PIPE", "CMD", "SUBSHELL"};
+	char *strs[] = {"NONE", "OR", "AND", "WRITE", "APPEND", "READ", "HEREDOC", "PIPELINE", "CMD", "SUBSHELL"};
 	int i;
 	int j;
 
@@ -29,7 +29,7 @@ void print_ast(t_member *tree, int indent)
 	while (j++ < indent)
 		printf("    ");
 	i = 0;
-	printf("%s:\n", strs[tree->type]);
+	printf("%s:", strs[tree->type]);
 	if (tree->type == CMD)
 		print_args((char **)tree->members, 0, tree->size);
 	else if (tree->type == SUBSHELL)
@@ -39,5 +39,8 @@ void print_ast(t_member *tree, int indent)
 	}
 	else
 		while (i < tree->size)
+		{
+			puts("");
 			print_ast(tree->members[i++], indent + 1);
+		}
 }
