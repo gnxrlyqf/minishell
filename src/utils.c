@@ -7,28 +7,30 @@ char	*max_str(char *a, char *b)
 	return (b);
 }
 
+int skip(char *str, int i, char c, int rev)
+{
+	int stop;
+
+	stop = ft_strlen(str) * !rev - rev;
+	while (i != stop && str[i] != c)
+		i += 1 - 2 * rev;
+	return (i);
+}
+
 int	wc(char *str, char c)
 {
 	int	i;
 	int	count;
-	int skip;
 
 	i = 0;
 	count = 0;
-	skip = 0;
 	while (str[i])
 	{
-		if (ft_strchr("\"'(", str[i]))
-		{
-			skip++;
-			continue;
-		}
-		if (ft_strchr("\"')", str[i]))
-		{
-			skip--;
-			continue;
-		}
-		if (!skip && str[i] != c)
+		if (str[i] == '"' || str[i] == '\'')
+			i = skip(str, i, str[i], 0);
+		if (str[i] == '(')
+			i = skip(str, i, ')', 0);
+		if (str[i] != c)
 		{
 			count++;
 			while (str[i] && str[i] != c)

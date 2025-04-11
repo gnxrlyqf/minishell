@@ -3,25 +3,17 @@
 char	*strrstr_skip(char *str, char *sub)
 {
 	int	i;
-	int skip;
 	int sublen;
 
 	sublen = ft_strlen(sub);
-	skip = 0;
 	i = ft_strlen(str);
 	while (--i >= 0)
 	{
-		if (ft_strchr("\"')", str[i]))
-		{
-			skip++;
-			continue;
-		}
-		if (ft_strchr("\"'(", str[i]))
-		{
-			skip--;
-			continue;
-		}
-		if (!skip && !ft_strncmp(str + i, sub, sublen))
+		if (str[i] == '"' || str[i] == '\'')
+			i = skip(str, i - 1, str[i], 1);
+		if (str[i] == ')')
+			i = skip(str, i - 1, '(', 1);
+		if (!ft_strncmp(str + i, sub, sublen))
 			return (str + i);
 	}
 	return (NULL);
@@ -30,27 +22,19 @@ char	*strrstr_skip(char *str, char *sub)
 char	*strstr_skip(char *str, char *sub)
 {
 	int	i;
-	int skip;
 	int sublen;
 	int strlen;
 
 	sublen = ft_strlen(sub);
 	strlen = ft_strlen(str);
-	skip = 0;
 	i = -1;
 	while (++i < strlen)
 	{
-		if (ft_strchr("\"'(", str[i]))
-		{
-			skip++;
-			continue;
-		}
-		if (ft_strchr("\"')", str[i]))
-		{
-			skip--;
-			continue;
-		}
-		if (!skip && !ft_strncmp(str + i, sub, sublen))
+		if (str[i] == '"' || str[i] == '\'')
+			i = skip(str, i + 1, str[i], 0);
+		if (str[i] == '(')
+			i = skip(str, i + 1, ')', 0);
+		if (!ft_strncmp(str + i, sub, sublen))
 			return (str + i);
 	}
 	return (NULL);
