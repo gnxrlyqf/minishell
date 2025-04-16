@@ -11,10 +11,9 @@ int main(int ac, char **av, char **envp)
 	exp = malloc(sizeof(t_member));
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = readline("ewa SHbitdir$ ");
 		if (line)
 			add_history(line);
-		printf("> %d\n", validate_input(line));
 		exp->type = SUBSHELL;
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);

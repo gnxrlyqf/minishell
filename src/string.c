@@ -1,6 +1,33 @@
 #include <main.h>
 
-char	*strrstr_skip(char *str, char *sub)
+char	*ft_strtrim(char *s1, char c)
+{
+	int		i;
+	int		len;
+	char	*new;
+
+	len = ft_strlen(s1);
+	while (--len && c == s1[len])
+		;
+	if (!len)
+		return (ft_strdup(""));
+	i = -1;
+	while (s1[++i] && c == s1[i])
+		len--;
+	new = malloc(++len + 1);
+	if (!new)
+		return (NULL);
+	new[len] = 0;
+	while (1)
+	{
+		if (!*new)
+			break ;
+		*(new++) = s1[i++];
+	}
+	return (new - len);
+}
+
+char	*ft_strrstr_skip(char *str, char *sub)
 {
 	int	i;
 	int sublen;
@@ -19,7 +46,7 @@ char	*strrstr_skip(char *str, char *sub)
 	return (NULL);
 }
 
-char	*strstr_skip(char *str, char *sub)
+char	*ft_strstr_skip(char *str, char *sub)
 {
 	int	i;
 	int sublen;
@@ -123,7 +150,12 @@ char	*ft_strtok(char *str, char *delims)
 		str++;
 	if (!*str)
 		return (NULL);
-	while (*str && !ft_strchr(delims, *str))
+	if (*str == '\'' || *str == '"')
+	{
+		i = skip(str, 1, *str, 0);
+		str += i;
+	}
+	while (*str && !ft_strchr(delims, *str) && *str != '\'' && *str != '"')
 	{
 		i++;
 		str++;
@@ -132,3 +164,4 @@ char	*ft_strtok(char *str, char *delims)
 	*str = 0;
 	return (str - i);
 }
+

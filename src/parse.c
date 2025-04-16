@@ -6,6 +6,7 @@ t_member *parse_cmd(char *str)
 
 	cmd = malloc(sizeof(t_member));
 	cmd->size = wc(str, ' ');
+	printf("%d\n", cmd->size);
 	cmd->type = CMD;
 	cmd->members = (void **)tokenize(str);
 	return (cmd);
@@ -53,7 +54,7 @@ t_member *parse_pipeline(char *str)
 	skip = 0;
 	while (--count)
 	{
-		skip = ft_strlen(str) - ft_strlen(strstr_skip(str, "|"));
+		skip = ft_strlen(str) - ft_strlen(ft_strstr_skip(str, "|"));
 		str[skip] = 0;
 		pipeline->members[i++] = parse_subshell(str);
 		str += skip + 1;
@@ -67,7 +68,7 @@ t_member *parse_logop(char *str)
 	char *split;
 	t_member *op;
 
-	split = max_str(strrstr_skip(str, "&&"), strrstr_skip(str, "||"));
+	split = max_str(ft_strrstr_skip(str, "&&"), ft_strrstr_skip(str, "||"));
 	if (!split)
 		return (parse_pipeline(str));
 	op = malloc(sizeof(t_member));

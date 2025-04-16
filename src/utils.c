@@ -27,7 +27,7 @@ int	wc(char *str, char c)
 	while (str[i])
 	{
 		if (str[i] == '"' || str[i] == '\'')
-			i = skip(str, i, str[i], 0);
+			i = skip(str, i + 1, str[i], 0);
 		if (str[i] == '(')
 			i = skip(str, i, ')', 0);
 		if (str[i] != c)
@@ -50,8 +50,8 @@ char	**tokenize(char *str)
 	i = wc(str, ' ');
 	args = malloc(sizeof(char *) * (i + 1));
 	args[i] = NULL;
-	args[0] = ft_strtok(str, " ");
 	i = -1;
+	args[0] = ft_strtok(str, " ");
 	while (args[++i])
 		args[i + 1] = ft_strtok(NULL, " ");
 	return (args);
