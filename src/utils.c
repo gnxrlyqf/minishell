@@ -12,14 +12,20 @@ int skip(char *str, int i, char c, int rev)
 	int subshell;
 	int stop;
 
-	if (ft_strchr("()", c))
-		subshell = 1 + 2 * (c - '(');
 	stop = ft_strlen(str) * !rev - rev;
-	while (i != stop && str[i] != c)
+	if (c == ')' || c == '(')
 	{
-
-		i += 1 - 2 * rev;
+		subshell = 1 - 2 * (c == '(');
+		while (i != stop && subshell)
+		{
+			if (str[i] == ')' || str[i] == '(')
+				subshell += 1 - 2 * (str[i] == ')');
+			i += 1 - 2 * rev;
+		}
 	}
+	else
+		while (i != stop && str[i] != c)
+			i += 1 - 2 * rev;
 	return (i);
 }
 
@@ -35,7 +41,7 @@ int	wc(char *str, char c)
 		if (str[i] == '"' || str[i] == '\'')
 			i = skip(str, i + 1, str[i], 0);
 		if (str[i] == '(')
-			i = skip(str, i, ')', 0);
+			i = skip(str, i + 1, ')', 0);
 		if (str[i] != c)
 		{
 			count++;

@@ -48,7 +48,6 @@ char	*ft_strrstr_skip(char *str, char *sub)
 
 char	*ft_strstr_skip(char *str, char *sub)
 {
-	int subshell;
 	int	i;
 	int sublen;
 	int strlen;
