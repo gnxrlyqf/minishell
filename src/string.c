@@ -48,6 +48,7 @@ char	*ft_strrstr_skip(char *str, char *sub)
 
 char	*ft_strstr_skip(char *str, char *sub)
 {
+	int subshell;
 	int	i;
 	int sublen;
 	int strlen;
@@ -152,8 +153,8 @@ char	*ft_strtok(char *str, char *delims)
 		return (NULL);
 	if (*str == '\'' || *str == '"')
 	{
-		i = skip(str, 1, *str, 0);
-		str += i;
+		i = skip(str, 1, *str, 0) - 1;
+		str += i + 1;
 	}
 	while (*str && !ft_strchr(delims, *str) && *str != '\'' && *str != '"')
 	{

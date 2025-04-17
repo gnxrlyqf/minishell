@@ -9,11 +9,17 @@ char	*max_str(char *a, char *b)
 
 int skip(char *str, int i, char c, int rev)
 {
+	int subshell;
 	int stop;
 
+	if (ft_strchr("()", c))
+		subshell = 1 + 2 * (c - '(');
 	stop = ft_strlen(str) * !rev - rev;
 	while (i != stop && str[i] != c)
+	{
+
 		i += 1 - 2 * rev;
+	}
 	return (i);
 }
 
