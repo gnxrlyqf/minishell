@@ -14,6 +14,7 @@ int main(int ac, char **av, char **envp)
 		line = readline("ewa SHbitdir$ ");
 		if (line)
 			add_history(line);
+		printf("validity: %d\n", validate_input(line));
 		exp->type = SUBSHELL;
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);

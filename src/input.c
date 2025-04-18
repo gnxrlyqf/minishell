@@ -1,22 +1,19 @@
 #include <main.h>
 
-int validate_input(char *str)
+int validate_input(char *str, char err)
 {
 	int subshell;
-	int squote;
-	int dquote;
 
 	subshell = 0;
-	dquote = 0;
-	squote = 0;
 	while (*str)
 	{
-		if (*str == '"' && !squote)
-			dquote = (dquote + 1) % 2;
-		if (*str == '\'' && !dquote)
-			squote = (squote + 1) % 2;
-		subshell += ((*str == '(') - (*str == ')')) * !(dquote || squote);
+		if (*str == '\'' || *str == '"')
+			str += skip(str, 1, *str, 0);
+		if (!*str)
+			return (0);
+		if (*str == '(' || *str == ')')
+			subshell += 1 - 2 * (*str == ')');
 		str++;
 	}
-	return (!(squote || dquote || subshell));
+	return (!subshell);
 }
