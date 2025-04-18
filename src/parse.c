@@ -2,13 +2,19 @@
 
 t_member *parse_cmd(char *str)
 {
+	int i;
 	t_member *cmd;
-
+	
 	cmd = malloc(sizeof(t_member));
-	cmd->size = wc(str, ' ');
-	printf("%d\n", cmd->size);
+	i = wc(str, ' ');
+	cmd->size = i;
 	cmd->type = CMD;
-	cmd->members = (void **)tokenize(str);
+	cmd->members = malloc(sizeof(char *) * (i + 1));
+	cmd->members[i] = NULL;
+	i = -1;
+	cmd->members[0] = ft_strtok_skip(str, " ");
+	while (cmd->members[++i])
+		cmd->members[i + 1] = ft_strtok_skip(NULL, " ");
 	return (cmd);
 }
 

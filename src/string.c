@@ -36,10 +36,8 @@ char	*ft_strrstr_skip(char *str, char *sub)
 	i = ft_strlen(str);
 	while (--i >= 0)
 	{
-		if (str[i] == '"' || str[i] == '\'')
+		if (ft_strchr("'\")", str[i]))
 			i = skip(str, i - 1, str[i], 1);
-		if (str[i] == ')')
-			i = skip(str, i - 1, '(', 1);
 		if (!ft_strncmp(str + i, sub, sublen))
 			return (str + i);
 	}
@@ -57,10 +55,8 @@ char	*ft_strstr_skip(char *str, char *sub)
 	i = -1;
 	while (++i < strlen)
 	{
-		if (str[i] == '"' || str[i] == '\'')
+		if (ft_strchr("'\"(", str[i]))
 			i = skip(str, i + 1, str[i], 0);
-		if (str[i] == '(')
-			i = skip(str, i + 1, ')', 0);
 		if (!ft_strncmp(str + i, sub, sublen))
 			return (str + i);
 	}
@@ -117,6 +113,8 @@ int	ft_strlen(char *str)
 	int	len;
 
 	len = 0;
+	if (!str)
+		return (len);
 	while (*(str++))
 		len++;
 	return (len);
@@ -138,7 +136,7 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 	return (*s1 - *s2);
 }
 
-char	*ft_strtok(char *str, char *delims)
+char	*ft_strtok_skip(char *str, char *delims)
 {
 	int	i;
 	static char *save;
