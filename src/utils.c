@@ -15,7 +15,7 @@ int skip(char *str, int i, char c, int rev)
 	stop = ft_strlen(str) * !rev - rev;
 	if (c == '\'' || c == '"')
 	{
-		while (1 != stop && str[i] != c)
+		while (i != stop && str[i] != c)
 			i += 1 - 2 * rev;		
 		return (i);
 	}

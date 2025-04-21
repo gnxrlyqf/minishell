@@ -16,6 +16,11 @@ int main(int ac, char **av, char **envp)
 			break ;
 		if (*line)
 			add_history(line);
+		if (!validate_input(line))
+		{
+			printf("error\n");
+			continue ;
+		}
 		exp->type = SUBSHELL;
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);

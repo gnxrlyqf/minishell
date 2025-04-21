@@ -8,12 +8,14 @@ t_member *parse_cmd(char *str)
 	i = wc(str, ' ');
 	cmd = init_member(i, CMD);
 	i = -1;
-	cmd->members[0] = ft_strtok_skip(str, " ");
-	while (cmd->members[++i])
+	cmd->members[++i] = ft_strtok_skip(str, " ");
+	if (*(char *)(cmd->members[i]) == '(')
+		return (cleanup(cmd));
+	while (++i < cmd->size)
 	{
-		cmd->members[i + 1] = ft_strtok_skip(NULL, " ");
-		if (is_empty(cmd->members[i + 1]))
-			return(cleanup(cmd));
+		cmd->members[i] = ft_strtok_skip(NULL, " ");
+		if (*(char *)(cmd->members[i]) == '(')
+			return (cleanup(cmd));
 	}
 	return (cmd);
 }
@@ -27,12 +29,12 @@ t_member *parse_subshell(char *str)
 		str++;
 	if (*str == '(')
 	{
-		subshell = init_member(1, SUBSHELL);
 		str++;
 		i = ft_strlen(str) - 1;
 		while (str[i] != ')')
 			i--;
 		str[i] = 0;
+		subshell = init_member(1, SUBSHELL);
 		subshell->members[0] = parse_logop(str);
 		if (is_empty(str) || !subshell->members[0])
 			return (cleanup(subshell));
@@ -63,7 +65,7 @@ t_member *parse_pipeline(char *str)
 			return (cleanup(pipeline));
 		str += skip + 1;
 	}
-	pipeline->members[i] = parse_subshell(str);
+	pipeline->members[++i] = parse_subshell(str);
 	if (is_empty(str) || !pipeline->members[i])
 		return (cleanup(pipeline));
 	return (pipeline);
@@ -97,23 +99,19 @@ t_member *init_member(int size, t_type type)
 	member->size = size;
 	member->type = type;
 	if (type == CMD)
-	{
-		member->members = malloc(sizeof(char *) * (size + 1));
-		member->members[size] = NULL;
-	}
+		member->members = malloc(sizeof(char *) * size);
 	else
-	{
 		member->members = malloc(sizeof(t_member) * size);
-		while (--size > -1)
-			member->members[size] = NULL;
-	}
+	while (--size > -1)
+		member->members[size] = NULL;
 	return (member);
 }
 
 void *cleanup(t_member *member)
 {
-	while (--member->size > -1)
-		free(member->members[member->size]);
+	if (member->type != CMD)
+		while (--member->size > -1)
+			free(member->members[member->size]);
 	free(member->members);
 	free(member);
 	return (NULL);
