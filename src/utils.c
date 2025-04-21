@@ -13,6 +13,12 @@ int skip(char *str, int i, char c, int rev)
 	int stop;
 
 	stop = ft_strlen(str) * !rev - rev;
+	if (c == '\'' || c == '"')
+	{
+		while (1 != stop && str[i] != c)
+			i += 1 - 2 * rev;		
+		return (i);
+	}
 	if (c == ')' || c == '(')
 	{
 		subshell = 1 - 2 * (c == ')');
@@ -23,7 +29,7 @@ int skip(char *str, int i, char c, int rev)
 		}
 		return (i);
 	}
-	while (i != stop && str[i] != c)
+	while (i != stop && str[i] == c)
 		i += 1 - 2 * rev;
 	return (i);
 }
@@ -49,4 +55,13 @@ int wc(char *str, char c)
 			i++;
 	}
 	return (count);
+}
+
+int is_empty(char *str)
+{
+	while (*str && *str == ' ')
+		str++;
+	if (!*str)
+		return (1);
+	return (0);
 }

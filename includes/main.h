@@ -37,9 +37,10 @@ int		ft_strlen(char *str);
 int		ft_strncmp(char *s1, char *s2, unsigned int n);
 char	*ft_strtok_skip(char *str, char *delims);
 int		wc(char *str, char c);
-char	**tokenize(char *str);
 int		skip(char *str, int i, char c, int rev);
 int		validate_input(char *str);
+int		is_empty(char *str);
+
 
 char	*max_str(char *a, char *b);
 
@@ -47,7 +48,10 @@ t_member *parse_pipeline(char *str);
 t_member *parse_subshell(char *str);
 t_member *parse_cmd(char *str);
 t_member *parse_logop(char *str);
+t_member *init_member(int size, t_type type);
 
 void print_ast(t_member *tree, int indent);
+void *cleanup(t_member *member);
+
 
 #endif

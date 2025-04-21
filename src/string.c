@@ -1,32 +1,5 @@
 #include <main.h>
 
-char	*ft_strtrim(char *s1, char c)
-{
-	int		i;
-	int		len;
-	char	*new;
-
-	len = ft_strlen(s1);
-	while (--len && c == s1[len])
-		;
-	if (!len)
-		return (ft_strdup(""));
-	i = -1;
-	while (s1[++i] && c == s1[i])
-		len--;
-	new = malloc(++len + 1);
-	if (!new)
-		return (NULL);
-	new[len] = 0;
-	while (1)
-	{
-		if (!*new)
-			break ;
-		*(new++) = s1[i++];
-	}
-	return (new - len);
-}
-
 char	*ft_strrstr_skip(char *str, char *sub)
 {
 	int	i;
@@ -163,3 +136,29 @@ char	*ft_strtok_skip(char *str, char *delims)
 	return (str - i);
 }
 
+char	*ft_strtrim(char *s1, char *set)
+{
+	int		i;
+	int		len;
+	char	*new;
+
+	len = ft_strlen(s1);
+	while (--len && ft_strchr(set, s1[len]))
+		;
+	if (!len)
+		return (ft_strdup(""));
+	i = -1;
+	while (s1[++i] && ft_strchr(set, s1[i]))
+		len--;
+	new = malloc(++len + 1);
+	if (!new)
+		return (NULL);
+	new[len] = 0;
+	while (1)
+	{
+		if (!*new)
+			break ;
+		*(new++) = s1[i++];
+	}
+	return (new - len);
+}

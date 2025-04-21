@@ -12,13 +12,23 @@ int main(int ac, char **av, char **envp)
 	while (1)
 	{
 		line = readline("ewa SHbitdir$ ");
-		if (line)
+		if (!line)
+			break ;
+		if (*line)
 			add_history(line);
-		printf("validity: %d\n", validate_input(line));
 		exp->type = SUBSHELL;
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);
-		print_ast(exp, 0);
-		puts("");
+		if (exp->members[0])
+		{
+			print_ast(exp, 0);
+			puts("");
+		}
+		else
+			printf("error\n");
+		free(exp->members);
+		free(line);
 	}
+	free(exp);
+	rl_clear_history();
 }
