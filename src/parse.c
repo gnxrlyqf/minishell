@@ -36,10 +36,12 @@ t_member *parse_subshell(char *str)
 		str[i] = 0;
 		subshell = init_member(1, SUBSHELL);
 		subshell->members[0] = parse_logop(str);
-		if (is_empty(str) || !subshell->members[0])
+		if (!subshell->members[0])
 			return (cleanup(subshell));
 		return (subshell);
 	}
+	if (is_empty(str))
+		return (NULL);
 	return (parse_cmd(str));
 }
 

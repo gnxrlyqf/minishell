@@ -59,6 +59,8 @@ int wc(char *str, char c)
 
 int is_empty(char *str)
 {
+	if (!str)
+		return (1);
 	while (*str && *str == ' ')
 		str++;
 	if (!*str)
