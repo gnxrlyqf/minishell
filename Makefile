@@ -23,4 +23,3 @@ fclean: clean
 	rm -rf $(NAME) $(BNAME)
 
 re: fclean all
-t

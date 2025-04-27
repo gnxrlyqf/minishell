@@ -29,8 +29,6 @@ int main(int ac, char **av, char **envp)
 			print_ast(exp, 0);
 			puts("");
 		}
-		else
-			printf("error\n");
 		free(exp->members);
 		free(line);
 	}

@@ -1,14 +1,29 @@
 #ifndef MAIN_H
 # define MAIN_H
 
+# include <fcntl.h>
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>	
 
-typedef enum type
+typedef enum e_token
 {
-	NONE,
+	TOKEN_NONE = 0,
+	SUB_OPEN = 1,
+	SUB_CLOSE = 2,
+	WORD = 4,
+	REDIR = 8,
+	OP = 16,
+	PIPE = 32,
+	VAR = 64,
+	INVALID = 128
+} t_token;
+
+typedef enum e_type
+{
+	TYPE_NONE,
 	OR,
 	AND,
 	WRITE,
@@ -52,6 +67,9 @@ t_member *init_member(int size, t_type type);
 
 void print_ast(t_member *tree, int indent);
 void *cleanup(t_member *member);
+
+int ft_log2(int n);
+int ft_abs(int a);
 
 
 #endif
