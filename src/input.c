@@ -26,8 +26,9 @@ t_token next_token(char **str)
 		{
 			while (*cpy && !ft_strchr(" |&()<>'\"", *cpy))
 				cpy++;
-			*str = cpy;
-			return (WORD);
+			while (*cpy == ' ')
+				cpy++;
+			return (*str = cpy, WORD);
 		}
 		cpy++;
 	}
@@ -62,16 +63,13 @@ int validate_input(char *str)
 	int subshell;
 	int quotes;
 
+	quotes = check_quotes(str);
 	curr = next_token(&str);
 	if (curr & (PIPE | OP | SUB_CLOSE | INVALID))
 		return (0);
 	subshell = (curr == SUB_OPEN) - (curr == SUB_CLOSE);
-	quotes = 0;
 	while (1)
 	{
-		printf("%c\n", *str);
-		if (*str == '"' || *str == '"')
-			quotes = !quotes;
 		next = next_token(&str);
 		subshell += (next == SUB_OPEN) - (next == SUB_CLOSE);
 		if (next == INVALID || !match_tokens(curr, next))
@@ -80,6 +78,45 @@ int validate_input(char *str)
 			break ;
 		curr = next;
 	}
-	printf("%d - %d\n", !subshell, !quotes);
-	return (!subshell && !quotes);
+	return (!subshell && quotes);
+}
+
+int check_quotes(char *str)
+{
+	while (*str)
+	{
+		if (*str == '"' || *str == '\'')
+			str += skip(str, 1, *str, 0);
+		if (!*str)
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+char *clean_quotes(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		c;
+
+	result = (char *)malloc(ft_strlen(str) + 1);
+	if (!result)
+		return (free(str), NULL);
+	i = 0;
+	j = 0;
+	c = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"') && !c)
+			c = str[i];
+		else if (str[i] == c)
+			c = 0;
+		else
+			result[j++] = str[i];
+		i++;
+	}
+	result[j] = '\0';
+	return (free(str), result);
 }

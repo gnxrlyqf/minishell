@@ -21,6 +21,8 @@ int main(int ac, char **av, char **envp)
 			printf("error\n");
 			continue ;
 		}
+		line = clean_quotes(line);
+		puts(line);
 		exp->type = SUBSHELL;
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);

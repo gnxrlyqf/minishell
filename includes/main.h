@@ -66,7 +66,11 @@ t_member *parse_init(char *str);
 t_member *init_member(int size, t_type type);
 
 void print_ast(t_member *tree, int indent);
+
 void *cleanup(t_member *member);
+int check_quotes(char *str);
+char *clean_quotes(char *str);
+
 
 int ft_log2(int n);
 int ft_abs(int a);
