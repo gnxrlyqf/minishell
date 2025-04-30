@@ -26,12 +26,15 @@ typedef enum e_type
 	TYPE_NONE,
 	OR,
 	AND,
-	WRITE,
+	OUTLIST,
+	TRUNC,
 	APPEND,
+	INLIST,
 	READ,
 	HEREDOC,
 	PIPELINE,
 	CMD,
+	ARGS,
 	SUBSHELL
 } t_type;
 
@@ -51,12 +54,14 @@ char	*ft_strrstr_skip(char *str, char *sub);
 int		ft_strlen(char *str);
 int		ft_strncmp(char *s1, char *s2, unsigned int n);
 char	*ft_strtok_skip(char *str, char *delims);
+
+char	*next_word(char **str);
 int		wc(char *str, char c);
 int		skip(char *str, int i, char c, int rev);
 int		validate_input(char *str);
 int		is_empty(char *str);
-
 char	*max_str(char *a, char *b);
+int		count_args(char *str);
 
 t_member *parse_pipeline(char *str);
 t_member *parse_subshell(char *str);
@@ -70,7 +75,6 @@ void print_ast(t_member *tree, int indent);
 void *cleanup(t_member *member);
 int check_quotes(char *str);
 char *clean_quotes(char *str);
-
 
 int ft_log2(int n);
 int ft_abs(int a);

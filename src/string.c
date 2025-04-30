@@ -136,6 +136,28 @@ char	*ft_strtok_skip(char *str, char *delims)
 	return (str - i);
 }
 
+char	*ft_strtok(char *str, char *delims)
+{
+	int	i;
+	static char *save;
+
+	i = 0;
+	if (!str)
+		str = save;
+	while (*str && ft_strchr(delims, *str))
+		str++;
+	if (!*str)
+		return (NULL);
+	while (*str && !ft_strchr(delims, *str))
+	{
+		i++;
+		str++;
+	}
+	save = str + 1 * (*str != 0);
+	*str = 0;
+	return (str - i);
+}
+
 char	*ft_strtrim(char *s1, char *set)
 {
 	int		i;

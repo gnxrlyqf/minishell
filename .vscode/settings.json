@@ -6,6 +6,7 @@
 		"initializer_list": "c",
 		"span": "c",
 		"sstream": "c",
-		"main.h": "c"
+		"main.h": "c",
+		"cstdlib": "c"
 	}
 }

@@ -107,16 +107,20 @@ char *clean_quotes(char *str)
 	i = 0;
 	j = 0;
 	c = 0;
-	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '"') && !c)
-			c = str[i];
-		else if (str[i] == c)
-			c = 0;
-		else
-			result[j++] = str[i];
-		i++;
-	}
+    while (str[i])
+    {
+        if ((str[i] == '\'' || str[i] == '"') && c)
+		{
+			result[j++] = str[i++];
+            c = str[i];
+		}
+        else if (str[i] == c)
+            c = 0;
+        else
+            result[j++] = str[i];
+        i++;
+    }
+	result[j++] = str[++i];
 	result[j] = '\0';
 	return (free(str), result);
 }
