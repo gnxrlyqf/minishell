@@ -29,7 +29,6 @@ typedef enum e_type
 	OUTLIST,
 	TRUNC,
 	APPEND,
-	INLIST,
 	READ,
 	HEREDOC,
 	PIPELINE,

@@ -96,31 +96,27 @@ int check_quotes(char *str)
 
 char *clean_quotes(char *str)
 {
-	char	*result;
-	int		i;
-	int		j;
-	int		c;
+	char    *result;
 
+	int i;
+	int j;
+	int c;
 	result = (char *)malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (free(str), NULL);
 	i = 0;
 	j = 0;
 	c = 0;
-    while (str[i])
-    {
-        if ((str[i] == '\'' || str[i] == '"') && c)
-		{
-			result[j++] = str[i++];
-            c = str[i];
-		}
-        else if (str[i] == c)
-            c = 0;
-        else
-            result[j++] = str[i];
-        i++;
-    }
-	result[j++] = str[++i];
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"') && c == 0)
+			c = str[i];
+		else if (str[i] == c)
+			c = 0;
+		else
+			result[j++] = str[i];
+		i++;
+	}
 	result[j] = '\0';
 	return (free(str), result);
 }

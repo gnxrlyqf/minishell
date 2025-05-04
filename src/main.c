@@ -25,10 +25,7 @@ int main(int ac, char **av, char **envp)
 		exp->members = malloc(sizeof(t_member *));
 		exp->members[0] = parse_logop(line);
 		if (exp->members[0])
-		{
 			print_ast(exp, 0);
-			puts("");
-		}
 		free(exp->members);
 		free(line);
 	}

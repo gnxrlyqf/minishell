@@ -5,42 +5,36 @@ int count_args(char *str)
 	int count;
 
 	count = 0;
-	while (*str == ' ')
+	while (ft_strchr(" <>", *str))
 		str++;
 	while (*str)
 	{
 		count++;
-		while (*str && *str != ' ')
+		while (*str && !ft_strchr(" <>", *str))
 		{
 			if (*str == '\'' || *str == '"')
 				str += skip(str, 1, *str, 0);
-			else if ((*str == '<' || *str == '>') && *(str - 1) == ' ')
-			{
-				count -= 2;
-				str += 1 + (*(str + 1) == '<' || *(str + 1) == '>');
-				break ;
-			}
 			str++;
 		}
-		while (*str == ' ')
+		while (ft_strchr(" <>", *str))
 			str++;
 	}
 	return (count);
 }
 
-int count_redir(char *str, int mode)
+int count_redir(char *str)
 {
 	int count;
 	char search;
 
 	count = 0;
-	search = '<' * (!mode) + '>' * (mode == 1);
 	while (*str)
 	{
-		if (*str == search)
+		if (*str == '<' || *str == '>')
 		{
+			search = *str;
 			count++;
-			*str += (*(str + 1) == search);
+			str += (*(str + 1) == search);
 		}
 		if (*str == '\'' || *str == '"')
 			str += skip(str, 1, *str, 0);
@@ -77,7 +71,7 @@ char *next_word(char **str)
 	return (word);
 }
 
-void parse_redir(t_member **cmd, char **str)
+void parse_redir(t_member **list, char **str, int index)
 {
 	char *cpy;
 	t_type type;
@@ -86,67 +80,82 @@ void parse_redir(t_member **cmd, char **str)
 	cpy = *str;
 	type = TRUNC * (*cpy == '>') + READ * (*cpy == '<');
 	redir = init_member(1, type + (*cpy == *(cpy + 1)));
-	*(redir->members++) = next_word(&cpy);
-	(*cmd)->members[1 + (*cpy == '<')] = redir;
-	*str = cpy + 1 + (*cpy == *(cpy + 1));
+	cpy += 1 + (*cpy == *(cpy + 1));
+	redir->members[0] = clean_quotes(next_word(&cpy));
+	(*list)->members[index] = redir;
+	*str = cpy;
 }
 
 t_member *init_cmd(char *str)
 {
 	int count;
-	t_member *in;
-	t_member *out;
+	t_member *redir;
 	t_member *args;
 	t_member *cmd;
 
-	count = count_args(str);
+	redir = NULL;
+	count = count_redir(str);
+	if (count)
+		redir = init_member(count, OUTLIST);
+	count = count_args(str) - count;
 	args = init_member(count, ARGS);
-	in = NULL;
-	out = NULL;
-	count = count_redir(str, 0);
-	if (count)
-		in = init_member(count, INLIST);
-	count = count_redir(str, 1);
-	if (count)
-		out = init_member(count, OUTLIST);
-	cmd = init_member(3, CMD);
-	cmd->size -= (in != NULL) + (out != NULL);
+	cmd = init_member(2 - (!redir), CMD);
 	cmd->members[0] = args;
-	cmd->members[1] = in;
-	cmd->members[2] = out;
+	if (redir)
+		cmd->members[1] = redir;
 	return (cmd);
 }
 
 t_member *parse_cmd(char *str)
 {
-	int i;
+	int a;
+	int r;
 	char *word;
 	t_member *cmd;
 
-	i = 0;
+	a = 0;
+	r = 0;
 	cmd = init_cmd(str);
 	while (1)
 	{
+		while (*str == ' ')
+			str++;
 		if (*str == '<' || *str == '>')
 		{
-			parse_redir(&cmd, &str);
+			parse_redir((t_member **)(&cmd->members[1]), &str, r++);
 			continue ;
 		}
 		word = next_word(&str);
 		if (!word)
 			break ;
-		((t_member *)cmd->members[0])->members[i++] = word;
+		((t_member *)cmd->members[0])->members[a++] = clean_quotes(word);
 	}
-	if (cmd->members[1])
-		((t_member *)cmd->members[1])->members -= ((t_member *)cmd->members[1])->size;
-	if (cmd->members[2])
-		((t_member *)cmd->members[2])->members -= ((t_member *)cmd->members[2])->size;
 	return (cmd);
+}
+
+void parse_redir_sub(t_member **list, char *str, int count)
+{
+	int i;
+
+	*list = init_member(count, OUTLIST);
+	i = 0;
+	while (1)
+	{
+		if (*str == '<' || *str == '>')
+		{
+			parse_redir(list, &str, i++);
+			continue ;
+		}
+		str++;
+		if (!*str)
+			break ;
+	}
 }
 
 t_member *parse_subshell(char *str)
 {
 	t_member *subshell;
+	int count;
 	int i;
 
 	while (*str == ' ')
@@ -158,14 +167,13 @@ t_member *parse_subshell(char *str)
 		while (str[i] != ')')
 			i--;
 		str[i] = 0;
-		subshell = init_member(1, SUBSHELL);
+		count = count_redir(str + i + 1);
+		subshell = init_member(2 - (!count), SUBSHELL);
+		if (count)
+			parse_redir_sub((t_member **)&subshell->members[1], str + i, count);
 		subshell->members[0] = parse_logop(str);
-		if (!subshell->members[0])
-			return (cleanup(subshell));
 		return (subshell);
 	}
-	if (is_empty(str))
-		return (NULL);
 	return (parse_cmd(str));
 }
 
@@ -187,13 +195,9 @@ t_member *parse_pipeline(char *str)
 		skip = ft_strlen(str) - ft_strlen(ft_strstr_skip(str, "|"));
 		str[skip] = 0;
 		pipeline->members[++i] = parse_subshell(str);
-		if (is_empty(str) || !pipeline->members[i])
-			return (cleanup(pipeline));
 		str += skip + 1;
 	}
 	pipeline->members[++i] = parse_subshell(str);
-	if (is_empty(str) || !pipeline->members[i])
-		return (cleanup(pipeline));
 	return (pipeline);
 }
 
@@ -212,8 +216,6 @@ t_member *parse_logop(char *str)
 		return (cleanup(op));
 	op->members[0] = parse_logop(str);
 	op->members[1] = parse_pipeline(split);
-	if (!op->members[0] || !op->members[1])
-		return (cleanup(op));
 	return (op);
 }
 
