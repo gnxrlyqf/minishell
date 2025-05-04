@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -g #-Werror
 INC = -I./includes
 LIB = -lreadline
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard src/*/*.c)
 NAME = minishell
 
 .PHONY: all clean fclean re bonus

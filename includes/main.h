@@ -62,12 +62,15 @@ int		is_empty(char *str);
 char	*max_str(char *a, char *b);
 int		count_args(char *str);
 
-t_member *parse_pipeline(char *str);
-t_member *parse_subshell(char *str);
-t_member *parse_cmd(char *str);
-t_member *parse_logop(char *str);
-t_member *parse_init(char *str);
-t_member *init_member(int size, t_type type);
+t_member	*parse_pipeline(char *str);
+t_member	*parse_subshell(char *str);
+t_member	*parse_cmd(char *str);
+t_member	*parse_logop(char *str);
+t_member	*parse_init(char *str);
+t_member	*init_member(int size, t_type type);
+void		parse_redir(t_member **list, char **str, int index);
+int			count_redir(char *str);
+
 
 void print_ast(t_member *tree, int indent);
 
