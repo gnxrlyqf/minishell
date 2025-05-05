@@ -10,7 +10,7 @@ t_member *init_member(int size, t_type type)
 	if (type == ARGS)
 		member->members = malloc(sizeof(char *) * size);
 	else
-		member->members = malloc(sizeof(t_member) * size);
+		member->members = malloc(sizeof(t_member *) * size);
 	while (--size > -1)
 		member->members[size] = NULL;
 	return (member);
@@ -24,4 +24,31 @@ void *cleanup(t_member *member)
 	free(member->members);
 	free(member);
 	return (NULL);
+}
+
+char *clean_quotes(char *str)
+{
+	char    *result;
+
+	int i;
+	int j;
+	int c;
+	result = (char *)malloc(ft_strlen(str) + 1);
+	if (!result)
+		return (free(str), NULL);
+	i = 0;
+	j = 0;
+	c = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"') && c == 0)
+			c = str[i];
+		else if (str[i] == c)
+			c = 0;
+		else
+			result[j++] = str[i];
+		i++;
+	}
+	result[j] = '\0';
+	return (free(str), result);
 }

@@ -17,15 +17,12 @@ int main(int ac, char **av, char **envp)
 		if (*line)
 			add_history(line);
 		if (!validate_input(line))
-		{
-			printf("error\n");
 			continue ;
-		}
-		exp->type = SUBSHELL;
-		exp->members = malloc(sizeof(t_member *));
-		exp->members[0] = parse_logop(line);
-		if (exp->members[0])
-			print_ast(exp, 0);
+		printf("OK\n");
+		// exp = init_member(1, SUBSHELL);
+		// exp->members[0] = parse_logop(line);
+		// if (exp->members[0])
+		// 	print_ast(exp, 0);
 		free(exp->members);
 		free(line);
 	}

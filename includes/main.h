@@ -10,15 +10,13 @@
 
 typedef enum e_token
 {
-	TOKEN_NONE = 0,
+	TOKEN_NONE,
 	SUB_OPEN = 1,
 	SUB_CLOSE = 2,
 	WORD = 4,
 	REDIR = 8,
 	OP = 16,
-	PIPE = 32,
-	VAR = 64,
-	INVALID = 128
+	INVALID = 32
 } t_token;
 
 typedef enum e_type
