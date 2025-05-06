@@ -14,8 +14,3 @@ int ft_log2(int n)
 	}
 	return (result);
 }
-
-int ft_abs(int a)
-{
-	return (a * ((a >= 0) - (a < 0)));
-}
