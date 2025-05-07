@@ -1,4 +1,4 @@
-#include <main.h>
+#include <utils.h>
 
 char	*ft_strrstr_skip(char *str, char *sub)
 {

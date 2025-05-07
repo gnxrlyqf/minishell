@@ -1,4 +1,5 @@
-#include <main.h>
+#include <parsing.h>
+#include <utils.h>
 
 t_member *parse_pipeline(char *str)
 {

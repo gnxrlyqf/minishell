@@ -1,4 +1,5 @@
-#include <main.h>
+#include <utils.h>
+#include <parsing.h> 
 
 t_error get_error(char *str, int len)
 {
@@ -35,17 +36,14 @@ int validate_input(char *str, t_error *error)
 	quotes = check_quotes(str);
 	curr = next_token(&str, &len);
 	if (curr & (OP | SUB_CLOSE | INVALID))
-		return (0);
+		return (*error = get_error(str, len), 0);
 	subshell = (curr == SUB_OPEN) - (curr == SUB_CLOSE);
 	while (1)
 	{
 		next = next_token(&str, &len);
 		subshell += (next == SUB_OPEN) - (next == SUB_CLOSE);
 		if (next == INVALID || !match_tokens(curr, next))
-		{
-			*error = get_error(str, len);
-			return (0);
-		}
+			return (*error = get_error(str, len), 0);
 		if (!next)
 			break ;
 		curr = next;

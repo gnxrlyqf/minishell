@@ -1,4 +1,5 @@
-#include <main.h>
+#include <parsing.h>
+#include <utils.h>
 
 void parse_redir(t_member **list, char **str, int index)
 {

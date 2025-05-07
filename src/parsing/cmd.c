@@ -1,4 +1,5 @@
-#include <main.h>
+#include <parsing.h>
+#include <utils.h>
 
 int count_args(char *str)
 {

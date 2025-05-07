@@ -1,4 +1,5 @@
-#include <main.h>
+#include <parsing.h>
+#include <utils.h>
 
 t_member *init_member(int size, t_type type)
 {

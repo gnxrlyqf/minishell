@@ -8,6 +8,7 @@
 		"sstream": "c",
 		"main.h": "c",
 		"cstdlib": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"utils.h": "c"
 	}
 }
