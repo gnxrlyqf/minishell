@@ -68,7 +68,7 @@ void print_ast(t_member *tree, int indent)
 	else if (tree->type == SUBSHELL)
 	{
 		print_ast(tree->members[0], indent + 1);
-		if (tree->members[1])
+		if (tree->size == 2)
 			print_redir(tree->members[1], indent + 1);
 	}
 	else

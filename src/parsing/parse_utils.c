@@ -58,7 +58,6 @@ t_member *parse_init(char *str, t_error *error)
 {
 	t_member *exp;
 
-	error->data = NULL;
 	exp = init_member(1, SUBSHELL);
 	exp->members[0] = parse_logop(str);
 	if (!exp || !exp->members[0])

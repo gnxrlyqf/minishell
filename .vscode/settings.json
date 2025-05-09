@@ -9,6 +9,7 @@
 		"main.h": "c",
 		"cstdlib": "c",
 		"readline.h": "c",
-		"utils.h": "c"
+		"utils.h": "c",
+		"parsing.h": "c"
 	}
 }

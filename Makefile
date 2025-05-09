@@ -14,7 +14,6 @@ $(NAME): $(SRC:.c=.o)
 	$(CC) $^ $(LIB) -o $(NAME)
 
 %.o: %.c
-	$(info test: $(patsubst src/%/*.c,obj/*.o,$(SRC)))
 	$(CC) $(INC) $(CFLAGS) -c $< -o $@
 
 clean:
