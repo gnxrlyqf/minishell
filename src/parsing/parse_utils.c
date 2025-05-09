@@ -1,5 +1,4 @@
-#include <parsing.h>
-#include <utils.h>
+#include <main.h>
 
 t_member *init_member(int size, t_type type)
 {
@@ -17,14 +16,15 @@ t_member *init_member(int size, t_type type)
 	return (member);
 }
 
-void *cleanup(t_member *member)
+int cleanup(t_member *member)
 {
-	if (member->type != CMD)
-		while (--member->size > -1)
-			free(member->members[member->size]);
+	if (!member)
+		return (1);
+	while (--member->size > -1)
+		free(member->members[member->size]);
 	free(member->members);
 	free(member);
-	return (NULL);
+	return (0);
 }
 
 char *clean_quotes(char *str)

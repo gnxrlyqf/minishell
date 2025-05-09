@@ -1,5 +1,4 @@
-#include <parsing.h>
-#include <utils.h>
+#include <main.h>
 
 void parse_redir(t_member **list, char **str, int index)
 {
@@ -11,7 +10,7 @@ void parse_redir(t_member **list, char **str, int index)
 	type = TRUNC * (*cpy == '>') + READ * (*cpy == '<');
 	redir = init_member(1, type + (*cpy == *(cpy + 1)));
 	cpy += 1 + (*cpy == *(cpy + 1));
-	redir->members[0] = clean_quotes(next_word(&cpy));
+	redir->members[0] = next_word(&cpy);
 	(*list)->members[index] = redir;
 	*str = cpy;
 }

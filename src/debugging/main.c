@@ -22,6 +22,7 @@ int main(int ac, char **av, char **envp)
 		if (!exp)
 			throw_err(error);
 		print_ast(exp, 0);
+		free_tree(exp);
 	}
 	rl_clear_history();
 }

@@ -1,5 +1,4 @@
-#include <utils.h>
-#include <parsing.h> 
+#include <main.h>
 
 t_error get_error(char *str, int len)
 {
@@ -57,9 +56,9 @@ char *get_input(t_error *error)
 
 	line = readline("ewa SHbitdir$ ");
 	if (!line)
-		error->code = ERR_MALLOC;
-	if (is_empty(line))
 		return (NULL);
+	// if (is_empty(line))
+	// 	return (NULL);
 	add_history(line);
 	if (!validate_input(line, error))
 		return (NULL);

@@ -1,4 +1,4 @@
-#include <utils.h>
+#include <main.h>
 
 char	*max_str(char *a, char *b)
 {
@@ -66,4 +66,19 @@ int is_empty(char *str)
 	if (!*str)
 		return (1);
 	return (0);
+}
+
+void free_tree(t_member *tree)
+{
+	if (!tree)
+		return ;
+	if (tree->type == ARGS)
+	{
+		cleanup(tree);
+		return ;
+	}
+	while (--tree->size > -1)
+		free_tree(tree->members[tree->size]);
+	free(tree->members);
+	free(tree);
 }

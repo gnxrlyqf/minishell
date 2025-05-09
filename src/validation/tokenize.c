@@ -1,12 +1,11 @@
-#include <utils.h>
-#include <parsing.h> 
+#include <main.h>
 
 int match_tokens(t_token curr, t_token next)
 {
 	static int *cases;
 	static int sub_flag;
 
-	sub_flag += (next & SUB_CLOSE) - (next & OP);
+	sub_flag += (next & SUB_CLOSE) - ((next & OP) != 0) * sub_flag;
 	if (sub_flag && !((curr ^ WORD) | (WORD ^ next)))
 		return (0);
 	if (!next)

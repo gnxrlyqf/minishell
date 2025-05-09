@@ -1,5 +1,4 @@
-#include <parsing.h>
-#include <utils.h>
+#include <main.h>
 
 int count_args(char *str)
 {
@@ -61,10 +60,16 @@ t_member *init_cmd(char *str)
 	redir = NULL;
 	count = count_redir(str);
 	if (count)
+	{
 		redir = init_member(count, OUTLIST);
+		if (!redir)
+			return (NULL);
+	}
 	count = count_args(str) - count;
 	args = init_member(count, ARGS);
 	cmd = init_member(2 - (!redir), CMD);
+	if (!cmd || !args)
+		return (cleanup(redir), cleanup(args), cleanup(cmd), NULL);
 	cmd->members[0] = args;
 	if (redir)
 		cmd->members[1] = redir;
@@ -81,6 +86,8 @@ t_member *parse_cmd(char *str)
 	a = 0;
 	r = 0;
 	cmd = init_cmd(str);
+	if (!cmd)
+		return (NULL);
 	while (1)
 	{
 		while (*str == ' ')
@@ -93,7 +100,7 @@ t_member *parse_cmd(char *str)
 		word = next_word(&str);
 		if (!word)
 			break ;
-		((t_member *)cmd->members[0])->members[a++] = clean_quotes(word);
+		((t_member *)cmd->members[0])->members[a++] = word;
 	}
 	return (cmd);
 }

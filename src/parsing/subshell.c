@@ -1,5 +1,4 @@
-#include <parsing.h>
-#include <utils.h>
+#include <main.h>
 
 void parse_redir_sub(t_member **list, char *str, int count)
 {
@@ -37,9 +36,13 @@ t_member *parse_subshell(char *str)
 		str[i] = 0;
 		count = count_redir(str + i + 1);
 		subshell = init_member(2 - (!count), SUBSHELL);
+		if (!subshell)
+			return (NULL);
 		if (count)
 			parse_redir_sub((t_member **)(&subshell->members[1]), str + i, count);
 		subshell->members[0] = parse_logop(str);
+		if (!subshell->members[0] || (count && !subshell->members[1]))
+			return (cleanup(subshell), NULL);
 		return (subshell);
 	}
 	return (parse_cmd(str));
