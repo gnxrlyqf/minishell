@@ -48,7 +48,7 @@ void print_cmd(t_member *tree, int indent)
 	j = 0;
 	i = -1;
 	print_args((char **)(((t_member *)tree->members[0])->members), indent, ((t_member *)tree->members[0])->size);
-	if (tree->members[1])
+	if (tree->size == 2)
 		print_redir(tree->members[1], indent);
 }
 

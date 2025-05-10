@@ -23,6 +23,7 @@ int main(int ac, char **av, char **envp)
 			throw_err(error);
 		print_ast(exp, 0);
 		free_tree(exp);
+		free(str);
 	}
 	rl_clear_history();
 }

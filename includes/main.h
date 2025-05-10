@@ -29,9 +29,9 @@ typedef enum e_type
 	APPEND,
 	READ,
 	HEREDOC,
-	PIPELINE,
-	CMD,
 	ARGS,
+	CMD,
+	PIPELINE,
 	SUBSHELL
 } t_type;
 

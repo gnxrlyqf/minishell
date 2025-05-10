@@ -70,15 +70,18 @@ int is_empty(char *str)
 
 void free_tree(t_member *tree)
 {
+	int i;
+
+	i = -1;
 	if (!tree)
 		return ;
-	if (tree->type == ARGS)
+	while (++i < tree->size)
 	{
-		cleanup(tree);
-		return ;
+		if (tree->type <= ARGS && tree->type >= TRUNC)
+			free(tree->members[i]);
+		else
+			free_tree(tree->members[i]);
 	}
-	while (--tree->size > -1)
-		free_tree(tree->members[tree->size]);
 	free(tree->members);
 	free(tree);
 }
