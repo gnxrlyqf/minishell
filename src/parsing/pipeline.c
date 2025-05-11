@@ -8,6 +8,7 @@ t_member *parse_pipeline(char *str)
 	int skip;
 
 	count = wc(str, '|');
+	printf("%s - %d\n", str, count);
 	if (count <= 1)
 		return (parse_subshell(str));
 	pipeline = init_member(count, PIPELINE);

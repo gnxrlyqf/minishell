@@ -6,7 +6,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
-# include <readline/history.h>	
+# include <readline/history.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <dirent.h>
 
 typedef enum e_token
 {
@@ -93,5 +96,8 @@ int		wc(char *str, char c);
 int		is_empty(char *str);
 int		ft_log2(int n);
 void	free_tree(t_member *tree);
+
+void pwd(void);
+
 
 #endif

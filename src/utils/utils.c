@@ -39,7 +39,8 @@ int wc(char *str, char c)
 	int i;
 	int count;
 
-	count = i = 0;
+	count = 0;
+	i = 0;
 	while (str[i] == c)
 		i++;
 	while (str[i])
@@ -49,7 +50,8 @@ int wc(char *str, char c)
 		{
 			if (ft_strchr("\"'(", str[i]))
 				i = skip(str, i + 1, str[i], 0);
-			i++;
+			else
+				i++;
 		}
 		while (str[i] == c)
 			i++;

@@ -23,7 +23,7 @@ void print_redir(t_member *redir, int indent)
 {
 	int i;
 	int j;
-	char *strs[] = {"TYPE_NONE", "OR", "AND", "REDIR", "TRUNC", "APPEND", "READ", "HEREDOC", "PIPELINE", "CMD", "ARGS", "SUBSHELL"};
+	char *strs[] = {"TYPE_NONE", "OR", "AND", "OUTLIST", "TRUNC", "APPEND", "READ", "HEREDOC", "ARGS", "CMD", "PIPELINE", "SUBSHELL"};
 
 	j = 0;
 	while (j++ < indent)
@@ -43,7 +43,7 @@ void print_cmd(t_member *tree, int indent)
 {
 	int i;
 	int j;
-	char *strs[] = {"TYPE_NONE", "OR", "AND", "REDIR", "TRUNC", "APPEND", "READ", "HEREDOC", "PIPELINE", "CMD", "ARGS", "SUBSHELL"};
+	char *strs[] = {"TYPE_NONE", "OR", "AND", "OUTLIST", "TRUNC", "APPEND", "READ", "HEREDOC", "ARGS", "CMD", "PIPELINE", "SUBSHELL"};
 
 	j = 0;
 	i = -1;
@@ -54,7 +54,7 @@ void print_cmd(t_member *tree, int indent)
 
 void print_ast(t_member *tree, int indent)
 {
-	char *strs[] = {"TYPE_NONE", "OR", "AND", "REDIR", "TRUNC", "APPEND", "READ", "HEREDOC", "PIPELINE", "CMD", "ARGS", "SUBSHELL"};
+	char *strs[] = {"TYPE_NONE", "OR", "AND", "OUTLIST", "TRUNC", "APPEND", "READ", "HEREDOC", "ARGS", "CMD", "PIPELINE", "SUBSHELL"};
 	int i;
 	int j;
 
