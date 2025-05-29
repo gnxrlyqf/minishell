@@ -30,10 +30,10 @@ int cleanup(t_member *member)
 char *clean_quotes(char *str)
 {
 	char    *result;
-
 	int i;
 	int j;
 	int c;
+	
 	result = (char *)malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (free(str), NULL);

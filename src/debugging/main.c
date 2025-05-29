@@ -5,10 +5,12 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	(void)envp;
+	t_env *env;
 	t_member *exp;
 	char *str;
 	t_error error;
 
+	env = init_env(envp);
 	while (1)
 	{
 		error.data = NULL;
@@ -18,13 +20,13 @@ int main(int ac, char **av, char **envp)
 			throw_err(error);
 			continue ;
 		}
-		exp = parse_init(str, &error);
-		if (!exp)
-			throw_err(error);
-		print_ast(exp, 0);
-		free_tree(exp);
-		free(str);
+		// exp = parse_init(str, &error);
+		// if (!exp)
+		// 	throw_err(error);
+		// print_ast(exp, 0);
+		// free_tree(exp);
+		// free(str);
+		printf("new: %s\n", quotes_expand(str, env));
 	}
 	rl_clear_history();
 }
-

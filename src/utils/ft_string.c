@@ -87,3 +87,33 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 		return (0);
 	return (*s1 - *s2);
 }
+
+char	*ft_strndup(char *str, char *set)
+{
+	int		size;
+	char	*new;
+
+	size = 0;
+	while (*str && !ft_strchr(set, *str))
+	{
+		str++;
+		size++;
+	}
+	new = malloc(size + 1);
+	new += size;
+	*new = 0;
+	while (size--)
+		*(--new) = *(--str);
+	return (new);
+}
+
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}

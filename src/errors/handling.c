@@ -18,14 +18,10 @@ void malloc_error(void *data)
 
 void throw_err(t_error error)
 {
-	static error_handler *handlers;
-
-	if (!handlers)
-	{
-		handlers = malloc(sizeof(error_handler) * 3);
-		handlers[0] = NULL;
-		handlers[1] = unexpected_token;
-		handlers[2] = malloc_error;
-	}
+	static error_handler handlers[] = {
+		NULL,
+		unexpected_token,
+		malloc_error
+	};
 	handlers[error.code](error.data);
 }
