@@ -1,15 +1,20 @@
 #include <main.h>
 
-t_str	*add_node_str(t_str **head, char c)
+t_list	*add_node(t_list **head, void *value, int type)
 {
-	t_str	*curr;
-	t_str	*new;
+	t_list	*curr;
+	t_list	*new;
 
-	new = malloc(sizeof(t_str));
+	new = malloc(sizeof(t_list));
 	if (!new)
 		return (NULL);
-	new->c = c;
 	new->next = NULL;
+	if (type == 1)
+		new->data.c = *(char *)value;
+	if (type == 2)
+		new->data.i = *(int *)value;
+	if (type == 3)
+		new->data.p = value;
 	if (!*head)
 	{
 		*head = new;
@@ -22,10 +27,10 @@ t_str	*add_node_str(t_str **head, char c)
 	return (new);
 }
 
-void	free_list(t_str **head)
+void	free_list(t_list **head)
 {
-	t_str	*current;
-	t_str	*temp;
+	t_list	*current;
+	t_list	*temp;
 
 	if (!head)
 		return ;
@@ -39,10 +44,10 @@ void	free_list(t_str **head)
 	*head = NULL;
 }
 
-int	list_len(t_str *list)
+int	list_len(t_list *list)
 {
 	int		i;
-	t_str	*curr;
+	t_list	*curr;
 
 	if (!list)
 		return (0);
@@ -56,7 +61,7 @@ int	list_len(t_str *list)
 	return (i);
 }
 
-int fill_var(char *str, t_str **list, t_env *env)
+int fill_var(char *str, t_list **list, t_env *env)
 {
 	t_env *curr;
 	char *varname;
@@ -75,7 +80,7 @@ int fill_var(char *str, t_str **list, t_env *env)
 		value = curr->value;
 		while (*value)
 		{
-			add_node_str(list, *value);
+			add_node(list, value, 1);
 			value++;
 		}
 		free(varname);
@@ -83,11 +88,11 @@ int fill_var(char *str, t_str **list, t_env *env)
 	return (varsize + 1);
 }
 
-char *make_str(t_str *list)
+char *make_str(t_list *list)
 {
 	char *str;
 	int size;
-	t_str *curr;
+	t_list *curr;
 	int i;
 
 	size = list_len(list);
@@ -97,7 +102,7 @@ char *make_str(t_str *list)
 	curr = list;
 	while (curr)
 	{
-		*(str + i) = curr->c;
+		*(str + i) = curr->data.c;
 		curr = curr->next;
 		i++;
 	}
@@ -106,7 +111,7 @@ char *make_str(t_str *list)
 
 char *quotes_expand(char *str, t_env *env)
 {
-	t_str *list;
+	t_list *list;
 	char *cpy;
 	char *ret;
 	int c;
@@ -123,7 +128,7 @@ char *quotes_expand(char *str, t_env *env)
 		else if (*cpy == c)
 			c = 0;
 		else
-			add_node_str(&list, *cpy);
+			add_node(&list, cpy, 1);
 		cpy++;
 	}
 	ret = make_str(list);

@@ -45,9 +45,9 @@ t_env *init_env(char **envp)
 	return (env);
 }
 
-// void init_shell(char **envp)
-// {
-// 	t_env env;
+void init_shell(char **envp)
+{
+	t_env env;
 
 
-// }
+}

@@ -10,6 +10,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <dirent.h>
+# include <assert.h>
 
 typedef enum e_token
 {
@@ -52,11 +53,18 @@ typedef struct s_err
 	void *data;
 } t_error;
 
-typedef struct s_str
+typedef union u_data
 {
-	struct s_str *next;
 	char c;
-} t_str;
+	int i;
+	void *p;
+} t_data;
+
+typedef struct s_list
+{
+	struct s_list	*next;
+	t_data			data;
+} t_list;
 
 typedef struct s_env
 {
@@ -72,8 +80,13 @@ typedef struct	s_member
 	void	**members;
 }	t_member;
 
+t_list		*add_node(t_list **head, void *value, int type);
+int		list_len(t_list *list);
+
 void		print_ast(t_member *tree, int indent);
 void		print_env(t_env *env);
+void		print_list(t_list *list, int type);
+
 
 int			count_args(char *str);
 char		*next_word(char **str);
@@ -120,6 +133,10 @@ int			wc(char *str, char c);
 int			is_empty(char *str);
 int			ft_log2(int n);
 void		free_tree(t_member *tree);
+
+int			get_wildcard_files(t_list **files, char *exp);
+t_member	*expand_wildcard(t_member *args);
+int			check_wildcard(char *exp, char *file);
 
 void		throw_err(t_error error);
 

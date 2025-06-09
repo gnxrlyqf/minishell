@@ -5,6 +5,7 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	(void)envp;
+	t_list *files;
 	t_env *env;
 	t_member *exp;
 	char *str;
@@ -20,13 +21,15 @@ int main(int ac, char **av, char **envp)
 			throw_err(error);
 			continue ;
 		}
+		get_wildcard_files(&files, str);
+		print_list(files, 3);
+		files = NULL;
 		// exp = parse_init(str, &error);
 		// if (!exp)
 		// 	throw_err(error);
 		// print_ast(exp, 0);
 		// free_tree(exp);
 		// free(str);
-		printf("new: %s\n", quotes_expand(str, env));
 	}
 	rl_clear_history();
 }
