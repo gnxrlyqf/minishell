@@ -1,35 +1,28 @@
 #include <main.h>
 
+t_shell g_shell;
+
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
 	(void)envp;
-	t_list *files;
-	t_env *env;
-	t_member *exp;
 	char *str;
-	t_error error;
 
-	env = init_env(envp);
+	init_shell(envp);
 	while (1)
 	{
-		error.data = NULL;
-		str = get_input(&error);
-		if (!str)
+		str = get_input();
+		if (str)
 		{
-			throw_err(error);
-			continue ;
+			g_shell.exp = parse_init(str);
+			if (g_shell.exp)
+				print_ast(g_shell.exp, 0);
 		}
-		get_wildcard_files(&files, str);
-		print_list(files, 3);
-		files = NULL;
-		// exp = parse_init(str, &error);
-		// if (!exp)
-		// 	throw_err(error);
-		// print_ast(exp, 0);
-		// free_tree(exp);
-		// free(str);
+		free_tree(g_shell.exp);
+		free(str);
+		if (g_shell.error->code)
+			throw_err();
 	}
 	rl_clear_history();
 }

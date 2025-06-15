@@ -2,22 +2,17 @@
 
 int	check_wildcard(char *exp, char *file)
 {
-	while (*exp && *file)
-	{
-		if (*exp == '*')
-		{
-			exp++;
-			if (!*exp)
-				return (1);
-			while (*file && *file != *exp)
-				file++;
-		}
-		if (*exp && *file != *exp)
-			return (0);
-		file++;
-		exp++;
-	}
-	return (1);
+	if (*exp == '\0' && *file == '\0')
+		return (1);
+	if (*exp == '*' && *(exp + 1) == '\0')
+		return (1);
+	if (*exp == '\0' || *file == '\0')
+		return (0);
+	if (*exp == *file)
+		return (check_wildcard(exp + 1, file + 1));
+	if (*exp == '*')
+		return (check_wildcard(exp + 1, file) || check_wildcard(exp, file + 1));
+	return (0);
 }
 
 int get_wildcard_files(t_list **files, char *exp)
@@ -39,11 +34,11 @@ int get_wildcard_files(t_list **files, char *exp)
 			count++;
 		}
 	}
-	// if (!count)
-	// {
-	// 	add_node(files, exp, 3);
-	// 	count = 1;
-	// }
+	if (!count)
+	{
+		add_node(files, exp, 3);
+		count = 1;
+	}
 	return (count);
 }
 
@@ -73,13 +68,17 @@ t_member *expand_wildcard(t_member *args)
 
 	files = NULL;
 	count = 0;
+	size = 0;
 	arr = (char **)args->members;
 	while (count < args->size)
 	{
 		if (!ft_strchr(arr[count], '*'))
+		{
 			add_node(&files, arr[count], 3);
+			size++;
+		}
 		else
-			size = get_wildcard_files(&files, arr[count]);
+			size += get_wildcard_files(&files, arr[count]);
 		count++;
 	}
 	free(args->members);

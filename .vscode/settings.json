@@ -6,6 +6,9 @@
 		"format": "c",
 		"initializer_list": "c",
 		"span": "c",
-		"main.h": "c"
+		"main.h": "c",
+		"future": "c",
+		"system_error": "c",
+		"source_location": "c"
 	}
 }

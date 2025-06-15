@@ -1,16 +1,5 @@
 #include <main.h>
 
-t_error get_error(char *str, int len)
-{
-	t_error error;
-
-	*str = 0;
-	str -= len;
-	error.data = str;
-	error.code = INV_TOKEN;
-	return (error);
-}
-
 int check_quotes(char *str)
 {
 	while (*str)
@@ -24,7 +13,7 @@ int check_quotes(char *str)
 	return (1);
 }
 
-int validate_input(char *str, t_error *error)
+int validate_input(char *str)
 {
 	t_token curr;
 	t_token next;
@@ -35,14 +24,14 @@ int validate_input(char *str, t_error *error)
 	quotes = check_quotes(str);
 	curr = next_token(&str, &len);
 	if (curr & (OP | SUB_CLOSE | INVALID))
-		return (*error = get_error(str, len), 0);
+		return (*str = 0, str -= len, set_err(INV_TOKEN, str), 0);
 	subshell = (curr == SUB_OPEN) - (curr == SUB_CLOSE);
 	while (1)
 	{
 		next = next_token(&str, &len);
 		subshell += (next == SUB_OPEN) - (next == SUB_CLOSE);
 		if (next == INVALID || !match_tokens(curr, next))
-			return (*error = get_error(str, len), 0);
+			return (*str = 0, str -= len, set_err(INV_TOKEN, str), 0);
 		if (!next)
 			break ;
 		curr = next;
@@ -50,17 +39,23 @@ int validate_input(char *str, t_error *error)
 	return (!subshell && quotes);
 }
 
-char *get_input(t_error *error)
+char *get_input(void)
 {
 	char *line;
 
 	line = readline("ewa SHbitdir$ ");
 	if (!line)
+	{
+		set_err(MALLOC_FAIL, "readline");
 		return (NULL);
-	// if (is_empty(line))
-	// 	return (NULL);
+	}
+	if (is_empty(line))
+	{
+		set_err(EMPTY_PROMPT, NULL);
+		return (NULL);
+	}
 	add_history(line);
-	if (!validate_input(line, error))
+	if (!validate_input(line))
 		return (NULL);
 	return (line);
 }

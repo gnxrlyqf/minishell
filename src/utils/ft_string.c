@@ -45,20 +45,20 @@ char	*ft_strchr(char *str, char c)
 	return (str);
 }
 
-// char	*ft_strdup(char *src)
-// {
-// 	int		i;
-// 	char	*new;
+char	*ft_strdup(char *src)
+{
+	int		i;
+	char	*new;
 
-// 	new = malloc((ft_strlen(src) + 1) * sizeof(char));
-// 	if (!src || !new)
-// 		return (NULL);
-// 	i = -1;
-// 	while (src[++i])
-// 		new[i] = src[i];
-// 	new[i] = '\0';
-// 	return (new);
-// }
+	new = malloc((ft_strlen(src) + 1) * sizeof(char));
+	if (!src || !new)
+		return (NULL);
+	i = -1;
+	while (src[++i])
+		new[i] = src[i];
+	new[i] = '\0';
+	return (new);
+}
 
 int	ft_strlen(char *str)
 {
@@ -93,6 +93,8 @@ char	*ft_strndup(char *str, char *set)
 	int		size;
 	char	*new;
 
+	if (!str || !set)
+		return (NULL);
 	size = 0;
 	while (*str && !ft_strchr(set, *str))
 	{

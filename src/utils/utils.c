@@ -79,7 +79,7 @@ void free_tree(t_member *tree)
 		return ;
 	while (++i < tree->size)
 	{
-		if (tree->type <= ARGS && tree->type >= TRUNC)
+		if (tree->type < ARGS)
 			free(tree->members[i]);
 		else
 			free_tree(tree->members[i]);
