@@ -11,7 +11,8 @@ void throw_err(void)
 		read_fail,
 		write_fail,
 		cmd_enoent,
-		ambig_redir
+		ambig_redir,
+		export_invalid_id
 	};
 	handlers[g_shell.error->code](g_shell.error->data);
 	free(g_shell.error->data);

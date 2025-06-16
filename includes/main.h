@@ -50,6 +50,7 @@ typedef enum e_err
 	WRITE_FAIL,
 	CMD_ENOENT,
 	AMBIG_REDIR,
+	EXPORT_INVALID_ID
 } t_err;
 
 typedef struct s_err
@@ -74,7 +75,7 @@ typedef struct s_list
 typedef struct s_env
 {
 	struct s_env *next;
-	char *name;
+	char *key;
 	char *value;
 } t_env;
 
@@ -104,6 +105,7 @@ int			list_len(t_list *list);
 void		print_ast(t_member *tree, int indent);
 void		print_env(t_env *env);
 void		print_list(t_list *list, int type);
+void		print_envp(char **envp);
 
 int			count_args(char *str);
 char		*next_word(char **str);
@@ -131,7 +133,14 @@ t_token		token_op(char **str, char *cpy, int *len);
 t_token		token_redir(char **str, char *cpy, int *len);
 t_token		next_token(char **str, int *len);
 
+
 t_env		*init_env(char **envp);
+int			env_len(t_env *env);
+char		**mkenvp(t_env *env);
+t_env		*add_node_env(t_env **head, char *name, char *value);
+char		*get_env_val(t_env *env, char *key);
+t_env		*get_env(t_env *env, char *key);
+
 void		init_shell(char **envp);
 
 char		*quotes_expand(char *str, t_env *env);
@@ -166,5 +175,6 @@ void		write_fail(void *data);
 void		ambig_redir(void *data);
 void		empty_prompt(void *data);
 void		cmd_enoent(void *data);
+void		export_invalid_id(void *data);
 
 #endif

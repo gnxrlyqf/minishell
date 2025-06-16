@@ -28,6 +28,8 @@ int get_wildcard_files(t_list **files, char *exp)
 		dirent = readdir(dir);
 		if (!dirent)
 			break ;
+		if (!ft_strcmp(dirent->d_name, "..") || !ft_strcmp(dirent->d_name, "."))
+			continue ;
 		if (check_wildcard(exp, dirent->d_name))
 		{
 			add_node(files, dirent->d_name, 3);

@@ -7,7 +7,7 @@ void print_env(t_env *env)
 	curr = env;
 	while (curr)
 	{
-		printf("%s=%s\n", curr->name, curr->value);
+		printf("%s=%s\n", curr->key, curr->value);
 		curr = curr->next;
 	}
 }
@@ -24,5 +24,14 @@ void print_list(t_list *list, int type)
 		str = (char *)curr->data.p;
 		printf("%s\n", str);
 		curr = curr->next;
+	}
+}
+
+void print_envp(char **envp)
+{
+	while (*envp)
+	{
+		puts(*envp);
+		envp++;
 	}
 }

@@ -73,7 +73,7 @@ int fill_var(char *str, t_list **list, t_env *env)
 	varname = ft_strndup(str, " $'\"");
 	varsize = ft_strlen(varname);
 	curr = env;
-	while (curr && ft_strcmp(curr->name, varname))
+	while (curr && ft_strcmp(curr->key, varname))
 		curr = curr->next;
 	if (curr)
 	{
