@@ -8,7 +8,7 @@ t_env	*add_node_env(t_env **head, char *name, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 	{
-		set_err(MALLOC_FAIL, "setenv");
+		throw_err(SYSCALL_FAIL, "setenv");
 		return (NULL);
 	}
 	new->key = name;

@@ -1,6 +1,6 @@
 #include <main.h>
 
-int env(char **args)
+int pwd(char **args)
 {
 	
 }

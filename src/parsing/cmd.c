@@ -66,7 +66,8 @@ t_member *init_cmd(char *str)
 			return (NULL);
 	}
 	count = count_args(str) - count;
-	args = init_member(count, ARGS);
+	args = init_member(count + 1, ARGS);
+	args->members[count] = NULL;
 	cmd = init_member(2 - (!redir), CMD);
 	if (!cmd || !args)
 		return (cleanup(redir), cleanup(args), cleanup(cmd), NULL);

@@ -1,23 +1,27 @@
 #include <main.h>
 
-void ambig_redir(void *data)
+void ambig_redir(char *data)
 {
 	(void)data;
 }
 
-void empty_prompt(void *data)
+void empty_prompt(char *data)
 {
 	
 }
 
-void cmd_enoent(void *data)
+void cmd_enoent(char *data)
 {
-	(char *)data;
-
-
+	write(2, data, ft_strlen(data));
+	write(2, ": command not found\n", 21);
 }
 
-void export_invalid_id(void *data)
+void invalid_id(char *data)
+{
+	
+}
+
+void perm_denied(char *data)
 {
 	
 }

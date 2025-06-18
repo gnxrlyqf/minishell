@@ -1,53 +1,62 @@
-// #include <main.h>
+#include <main.h>
 
-// typedef void (*f)(t_member *member);
+int my_open(char **path, int flags, int mode)
+{
+	int fd;
+	char *new;
 
-// int op(t_member *member)
-// {
-// 	int res;
+	new = quotes_expand(*path, g_shell.env);
+	if (!*new || ft_strchr(new, ' ') || ft_strchr(new, '*'))
+		throw_err(AMBIG_REDIR, *path);
+	*path = new;
+	if ((flags & O_RDONLY) && access(*path, R_OK) == -1)
+		throw_err(PERM_DENIED, *path);
+	if ((flags & O_WRONLY) && access(*path, W_OK) == -1)
+		throw_err(PERM_DENIED, *path);
+	fd = open(*path, flags, mode);
+	if (fd == -1)
+		throw_err(SYSCALL_FAIL, "open");
+	return (fd);
+}
 
-// 	res = member->type;
-// 	res -= breakdown(member->members[0]);
-// 	if (!res)
-// 		return (1);
-// 	res -= breakdown(member->members[1]);
-// 	if (!res)
-// 		return (1);
-// 	return (0);	
-// }
+void redir(t_member *redir)
+{
+	int i;
+	int in;
+	int out;
+	t_member **redirs;
+	char *file;
 
-// int cmd(t_member *member)
-// {
-// 	pid_t pid;
+	redirs = (t_member **)redir->members;
+	i = 0;
+	in = 0;
+	out = 1;
+	while (i < redir->size)
+	{
+		file = redirs[i]->members[0];
+		if (redirs[i]->type == READ || redirs[i]->type == HEREDOC)
+			in = my_open(&file, O_RDONLY, 0644);
+		if (redirs[i]->type == TRUNC)
+			out = my_open(&file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		if (redirs[i]->type == APPEND)
+			out = my_open(&file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		i++;
+	}
+	if (in != 0)
+		dup2(in, 0);
+	if (out != 1)
+		dup2(out, 1);
+}
 
-// 	pid = fork();
-// 	if (!pid)
-// 	{
-// 		if (member->size == 2)
-// 		{
-// 			// handle all redirections
-// 		}
-// 		//execute
-// 	}
-// }
-
-// int pipeline(t_member *member)
-// {
-// 	//do pipex on member->members
-// }
-
-// int subshell(t_member *member)
-// {
-// 	if (member->size == 2)
-// 	{
-// 		// handle all redirections
-// 	}
-// 	breakdown(member->members[0]);
-// }
-
-// int breakdown(t_member *member)
-// {
-// 	static f funcs[] = {NULL, op, op, pipeline, subshell, cmd};
-
-// 	funcs[member->type](member);
-// }
+int breakdown(t_member *member)
+{
+	static func f[] = {
+		NULL,
+		or,
+		and,
+		pipeline,
+		subshell,
+		cmd
+	};
+	return(f[member->type](member));
+}

@@ -1,6 +1,6 @@
 #include <main.h>
 
-int env(char **args)
+int _exit(char **args)
 {
 	
 }

@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 # define MAIN_H
 
+# include <wait.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -44,20 +45,13 @@ typedef enum e_err
 	ERR_NONE,
 	EMPTY_PROMPT,
 	INV_TOKEN,
-	MALLOC_FAIL,
-	PIPE_FAIL,
-	READ_FAIL,
-	WRITE_FAIL,
+	SYSCALL_FAIL,
+	PERM_DENIED,
 	CMD_ENOENT,
 	AMBIG_REDIR,
-	EXPORT_INVALID_ID
+	IS_DIR,
+	INVALID_ID
 } t_err;
-
-typedef struct s_err
-{
-	t_err code;
-	void *data;
-} t_error;
 
 typedef union u_data
 {
@@ -65,6 +59,13 @@ typedef union u_data
 	int i;
 	void *p;
 } t_data;
+
+typedef struct s_err
+{
+	t_err code;
+	void *data;
+} t_error;
+
 
 typedef struct s_list
 {
@@ -92,10 +93,12 @@ typedef struct s_shell
 	t_member *exp;
 	t_error *error;
 	t_env *env;
-	int exit_status;
+	int status;
 } t_shell;
 
-typedef void (*error_handler)(void *data);
+typedef void (*error_handler)(char *data);
+typedef int (*func)(t_member *member);
+typedef int (*builtin)(char **args);
 
 extern t_shell g_shell;
 
@@ -133,6 +136,25 @@ t_token		token_op(char **str, char *cpy, int *len);
 t_token		token_redir(char **str, char *cpy, int *len);
 t_token		next_token(char **str, int *len);
 
+int			breakdown(t_member *member);
+void		exec(t_member *args);
+int			or(t_member *or);
+int			and(t_member *and);
+int			pipeline(t_member *pipeline);
+int			subshell(t_member *subshell);
+int			cmd(t_member *cmd);
+void		subshell_pipe(t_member *subshell);
+void		cmd_pipe(t_member *cmd);
+void		redir(t_member *redir);
+
+void		exec_builtins(char **args);
+int			echo(char **args);
+int			cd(t_member *member);
+int			pwd(char **args);
+int			export(char **args);
+int			unset(char **args);
+int			env(char **args);
+int			_exit(char **args);
 
 t_env		*init_env(char **envp);
 int			env_len(t_env *env);
@@ -153,6 +175,7 @@ int			ft_strncmp(char *s1, char *s2, unsigned int n);
 char		*ft_strndup(char *str, char *set);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_strdup(char *src);
+char		*ft_strtok(char *str, char *delims);
 
 char		*max_str(char *a, char *b);
 int			skip(char *str, int i, char c, int rev);
@@ -165,16 +188,13 @@ int			get_wildcard_files(t_list **files, char *exp);
 t_member	*expand_wildcard(t_member *args);
 int			check_wildcard(char *exp, char *file);
 
-void		set_err(t_err code, char *data);
-void		throw_err(void);
-void		unexpected_token(void *data);
-void		malloc_fail(void *data);
-void		pipe_fail(void *data);
-void		read_fail(void *data);
-void		write_fail(void *data);
-void		ambig_redir(void *data);
-void		empty_prompt(void *data);
-void		cmd_enoent(void *data);
-void		export_invalid_id(void *data);
+void		throw_err(t_err code, char *data);
+void		unexpected_token(char *data);
+void		syscall_fail(char *data);
+void		ambig_redir(char *data);
+void		perm_denied(char *data);
+void		empty_prompt(char *data);
+void		cmd_enoent(char *data);
+void		invalid_id(char *data);
 
 #endif

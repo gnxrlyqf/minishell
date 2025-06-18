@@ -24,14 +24,14 @@ int validate_input(char *str)
 	quotes = check_quotes(str);
 	curr = next_token(&str, &len);
 	if (curr & (OP | SUB_CLOSE | INVALID))
-		return (*str = 0, str -= len, set_err(INV_TOKEN, str), 0);
+		return (*str = 0, str -= len, throw_err(INV_TOKEN, str), 0);
 	subshell = (curr == SUB_OPEN) - (curr == SUB_CLOSE);
 	while (1)
 	{
 		next = next_token(&str, &len);
 		subshell += (next == SUB_OPEN) - (next == SUB_CLOSE);
 		if (next == INVALID || !match_tokens(curr, next))
-			return (*str = 0, str -= len, set_err(INV_TOKEN, str), 0);
+			return (*str = 0, str -= len, throw_err(INV_TOKEN, str), 0);
 		if (!next)
 			break ;
 		curr = next;
@@ -46,12 +46,12 @@ char *get_input(void)
 	line = readline("ewa SHbitdir$ ");
 	if (!line)
 	{
-		set_err(MALLOC_FAIL, "readline");
+		throw_err(SYSCALL_FAIL, "malloc");
 		return (NULL);
 	}
 	if (is_empty(line))
 	{
-		set_err(EMPTY_PROMPT, NULL);
+		throw_err(EMPTY_PROMPT, NULL);
 		return (NULL);
 	}
 	add_history(line);

@@ -17,12 +17,15 @@ int main(int ac, char **av, char **envp)
 		{
 			g_shell.exp = parse_init(str);
 			if (g_shell.exp)
-				print_ast(g_shell.exp, 0);
+			{
+				// print_ast(g_shell.exp, 0);
+				breakdown(g_shell.exp);
+			}
 		}
-		free_tree(g_shell.exp);
+		// free_tree(g_shell.exp);
 		free(str);
 		if (g_shell.error->code)
-			throw_err();
+			throw_err(g_shell.error->code, g_shell.error->data);
 	}
 	rl_clear_history();
 }

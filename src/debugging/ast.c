@@ -12,6 +12,7 @@ void print_args(char **args, int indent, int count)
 	i = -1;
 	while (++i < count)
 	{
+		args[i]= quotes_expand(args[i], g_shell.env);
 		printf("\"%s\"", args[i]);
 		if (i < count - 1)
 			printf(", ");
@@ -47,7 +48,7 @@ void print_cmd(t_member *tree, int indent)
 
 	j = 0;
 	i = -1;
-	tree->members[0] = expand_wildcard(tree->members[0]);
+	// tree->members[0] = expand_wildcard(tree->members[0]);
 	print_args((char **)(((t_member *)tree->members[0])->members), indent, ((t_member *)tree->members[0])->size);
 	if (tree->size == 2)
 		print_redir(tree->members[1], indent);

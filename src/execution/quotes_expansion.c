@@ -121,7 +121,7 @@ char *quotes_expand(char *str, t_env *env)
 	cpy = str;
 	while (*cpy)
 	{
-		if (*cpy == '$' && c != '\'')
+		if (*cpy == '$' && c != '\'' && *(cpy + 1) >= 48)
 			cpy += fill_var(cpy + 1, &list, env);
 		if ((*cpy == '\'' || *cpy == '"') && c == 0)
 			c = *cpy;

@@ -7,7 +7,7 @@ t_member *init_member(int size, t_type type)
 	member = malloc(sizeof(t_member));
 	if (!member)
 	{
-		set_err(MALLOC_FAIL, "init_member");
+		throw_err(SYSCALL_FAIL, "malloc");
 		return (NULL);
 	}
 	member->size = size;
@@ -18,7 +18,7 @@ t_member *init_member(int size, t_type type)
 		member->members = malloc(sizeof(t_member *) * size);
 	if (!member->members)
 	{
-		set_err(MALLOC_FAIL, "init_member");
+		throw_err(SYSCALL_FAIL, "malloc");
 		return (NULL);
 	}
 	while (--size > -1)
@@ -45,7 +45,7 @@ char *clean_quotes(char *str)
 	result = (char *)malloc(ft_strlen(str) + 1);
 	if (!result)
 	{
-		set_err(MALLOC_FAIL, "clean_quotes");
+		throw_err(SYSCALL_FAIL, "malloc");
 		return (free(str), NULL);
 	}
 	i[0] = 0;
@@ -72,6 +72,6 @@ t_member *parse_init(char *str)
 	exp = init_member(1, SUBSHELL);
 	exp->members[0] = parse_logop(str);
 	if (!exp || !exp->members[0])
-		set_err(MALLOC_FAIL, "parse_init");
+		throw_err(SYSCALL_FAIL, "malloc");
 	return (exp);
 }
